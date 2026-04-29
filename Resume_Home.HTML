@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ankit Dasuni — Infographic Resume</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root {
+    --ink: #1a1714;
+    --paper: #f5f0e8;
+    --accent: #c8401a;
+    --accent2: #2a6d5e;
+    --gold: #c49a3a;
+    --mid: #6b6459;
+    --light: #e8e2d6;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: #2c2826;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 28px;
+  }
+
+  /* Download bar */
+  .download-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 50px;
+    padding: 10px 20px 10px 24px;
+    backdrop-filter: blur(10px);
+  }
+  .download-bar span {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .btn-dl {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+  }
+  .btn-dl:hover { background: #a83314; transform: translateY(-1px); }
+  .btn-dl svg { width: 14px; height: 14px; }
+
+  /* A4 canvas */
+  #resume {
+    width: 794px;
+    min-height: 1123px;
+    background: var(--paper);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+  }
+
+  /* Decorative background elements */
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .bg-stripe {
+    position: absolute;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 4px,
+      rgba(200,64,26,0.06) 4px,
+      rgba(200,64,26,0.06) 5px
+    );
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--ink);
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 220px;
+  }
+
+  .header-left {
+    background: var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-left::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 8px,
+      rgba(0,0,0,0.08) 8px,
+      rgba(0,0,0,0.08) 9px
+    );
+  }
+
+  .profile-img-wrap {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    overflow: hidden;
+    background: #c8401a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .profile-img-wrap svg {
+    width: 80px;
+    height: 80px;
+    opacity: 0.85;
+  }
+  .profile-label {
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 20px;
+  }
+
+  .header-right {
+    padding: 32px 36px 28px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  .header-right::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  .name-block .pre-name {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .name-block h1 {
+    font-family: var(--serif);
+    font-size: 46px;
+    line-height: 1;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+  .name-block .title {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .contact-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.03em;
+  }
+  .chip svg { width: 10px; height: 10px; opacity: 0.6; flex-shrink: 0; }
+
+  /* ── BODY GRID ── */
+  .body {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: calc(1123px - 220px);
+  }
+
+  /* LEFT SIDEBAR */
+  .sidebar {
+    background: var(--ink);
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    position: relative;
+  }
+  .sidebar::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent) 0%, transparent 60%);
+  }
+
+  .s-section-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .s-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(200,64,26,0.3);
+  }
+
+  .skill-item {
+    margin-bottom: 10px;
+  }
+  .skill-name {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .skill-name span { color: var(--accent); font-size: 9px; }
+  .skill-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .skill-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+  }
+
+  .lang-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .lang-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .lang-name { font-family: var(--sans); font-size: 10px; color: rgba(255,255,255,0.75); font-weight: 500; }
+  .lang-level { font-family: var(--mono); font-size: 8px; color: rgba(255,255,255,0.3); margin-left: auto; }
+
+  .tool-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tool-tag {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 3px;
+    padding: 3px 7px;
+  }
+
+  /* CERT CARD */
+  .cert-card {
+    background: linear-gradient(135deg, #c49a3a22, #c8401a11);
+    border: 1px solid rgba(196,154,58,0.25);
+    border-radius: 6px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cert-card::before {
+    content: '⭐';
+    position: absolute;
+    right: 10px; top: 8px;
+    font-size: 18px;
+    opacity: 0.15;
+  }
+  .cert-title {
+    font-family: var(--serif);
+    font-size: 11px;
+    color: var(--gold);
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+  .cert-issuer {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 2px;
+  }
+  .cert-date {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  /* EDUCATION in sidebar */
+  .edu-item { margin-bottom: 14px; }
+  .edu-degree {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.35;
+    margin-bottom: 2px;
+  }
+  .edu-school {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 1px;
+    letter-spacing: 0.04em;
+  }
+  .edu-meta {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--gold);
+  }
+
+  /* RIGHT MAIN */
+  .main {
+    background: var(--paper);
+    padding: 28px 30px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .section-head h2 {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: -0.2px;
+  }
+  .section-head .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--light), transparent);
+  }
+  .section-head .num {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--accent);
+    background: rgba(200,64,26,0.08);
+    padding: 2px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+  }
+
+  /* Summary */
+  .summary-text {
+    font-family: var(--sans);
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--mid);
+    border-left: 3px solid var(--accent);
+    padding-left: 14px;
+    font-style: italic;
+  }
+
+  /* Project card */
+  .project-card {
+    background: #fff;
+    border: 1px solid var(--light);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent2);
+  }
+  .project-card:last-child { margin-bottom: 0; }
+
+  .proj-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .proj-title {
+    font-family: var(--serif);
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .proj-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+  .proj-tag {
+    font-family: var(--mono);
+    font-size: 7.5px;
+    color: var(--accent2);
+    background: rgba(42,109,94,0.08);
+    border: 1px solid rgba(42,109,94,0.15);
+    border-radius: 3px;
+    padding: 2px 6px;
+  }
+  .proj-stat {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--accent);
+    background: rgba(200,64,26,0.07);
+    border-radius: 4px;
+    padding: 4px 8px;
+    white-space: nowrap;
+    text-align: right;
+    line-height: 1.4;
+    flex-shrink: 0;
+    margin-left: 10px;
+  }
+  .proj-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 6px;
+  }
+  .proj-bullets li {
+    font-family: var(--sans);
+    font-size: 9.5px;
+    color: var(--mid);
+    line-height: 1.55;
+    padding-left: 12px;
+    position: relative;
+  }
+  .proj-bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 8px;
+    top: 1px;
+  }
+
+  /* Experience */
+  .exp-item { margin-bottom: 12px; }
+  .exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 4px;
+  }
+  .exp-role {
+    font-family: var(--serif);
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .exp-date {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--accent);
+    background: rgba(200,64,26,0.07);
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+  .exp-company {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--mid);
+    letter-spacing: 0.06em;
+    margin-bottom: 5px;
+  }
+  .exp-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .exp-bullets li {
+    font-family: var(--sans);
+    font-size: 9.5px;
+    color: var(--mid);
+    line-height: 1.55;
+    padding-left: 12px;
+    position: relative;
+  }
+  .exp-bullets li::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: var(--accent2); font-size: 8px; top: 1px;
+  }
+  .exp-divider {
+    height: 1px;
+    background: var(--light);
+    margin: 10px 0;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .stat-box {
+    background: #fff;
+    border: 1px solid var(--light);
+    border-radius: 6px;
+    padding: 10px 12px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+  }
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--mid);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Footer strip */
+  .resume-footer {
+    background: var(--ink);
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-text {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.08em;
+  }
+  .footer-dot {
+    width: 4px; height: 4px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  /* ── PRINT / PDF ── */
+  @media print {
+    body { background: none; padding: 0; }
+    .download-bar { display: none; }
+    #resume { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="download-bar">
+  <span>Ankit Dasuni — Infographic Resume</span>
+  <button class="btn-dl" onclick="downloadPDF()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Download PDF
+  </button>
+</div>
+
+<div id="resume">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="profile-img-wrap">
+        <!-- Profile placeholder avatar -->
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="28" r="18" fill="rgba(255,255,255,0.35)"/>
+          <ellipse cx="40" cy="72" rx="28" ry="18" fill="rgba(255,255,255,0.25)"/>
+        </svg>
+      </div>
+      <div class="profile-label">Profile Photo</div>
+    </div>
+
+    <div class="header-right">
+      <div class="name-block">
+        <div class="pre-name">AI / ML Engineer</div>
+        <h1>Ankit<br>Dasuni</h1>
+        <div class="title">B.Tech CSE (AI & ML) · Final Year · 2026</div>
+      </div>
+      <div class="contact-chips">
+        <div class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.2 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.16 6.16l1.28-.52a2 2 0 012.11.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          +91-8128795115
+        </div>
+        <div class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          115ankitdasuni@gmail.com
+        </div>
+        <div class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          linkedin.com/in/ankitdasuni
+        </div>
+        <div class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+          github.com/ankitdasuni
+        </div>
+        <div class="chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Haldwani, Uttarakhand
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- Skills -->
+      <div>
+        <div class="s-section-label">Core Skills</div>
+        <div class="skill-item">
+          <div class="skill-name">Generative AI / RAG <span>Expert</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name">Python <span>Expert</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name">LangChain / LangGraph <span>Advanced</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name">PyTorch / TensorFlow <span>Advanced</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name">Multi-Agent Systems <span>Advanced</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name">SQL / Databases <span>Proficient</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:72%"></div></div>
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div>
+        <div class="s-section-label">Tools & Platforms</div>
+        <div class="tool-wrap">
+          <span class="tool-tag">Docker</span>
+          <span class="tool-tag">Git</span>
+          <span class="tool-tag">Streamlit</span>
+          <span class="tool-tag">Linux</span>
+          <span class="tool-tag">IBM Watson</span>
+          <span class="tool-tag">Render</span>
+          <span class="tool-tag">FAISS</span>
+          <span class="tool-tag">QdrantDB</span>
+          <span class="tool-tag">ChromaDB</span>
+          <span class="tool-tag">CrewAI</span>
+          <span class="tool-tag">OpenAI API</span>
+          <span class="tool-tag">HuggingFace</span>
+          <span class="tool-tag">REST API</span>
+          <span class="tool-tag">Arduino/IoT</span>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div>
+        <div class="s-section-label">Languages</div>
+        <div class="lang-item"><span class="lang-dot"></span><span class="lang-name">Python</span><span class="lang-level">Expert</span></div>
+        <div class="lang-item"><span class="lang-dot" style="background:var(--gold)"></span><span class="lang-name">C / C++</span><span class="lang-level">Proficient</span></div>
+        <div class="lang-item"><span class="lang-dot" style="background:var(--accent2)"></span><span class="lang-name">SQL</span><span class="lang-level">Proficient</span></div>
+      </div>
+
+      <!-- Certificates -->
+      <div>
+        <div class="s-section-label">Certifications</div>
+
+        <div class="cert-card" style="margin-bottom:8px;">
+          <div class="cert-issuer">IIT Madras</div>
+          <div class="cert-title">Deep Learning Summer School</div>
+          <div class="cert-date">Jun – Jul 2024 · Remote</div>
+        </div>
+
+        <div class="cert-card" style="margin-bottom:8px; border-color: rgba(42,109,94,0.25); background: linear-gradient(135deg,rgba(42,109,94,0.12),rgba(42,109,94,0.04));">
+          <div class="cert-issuer">CSRBOX</div>
+          <div class="cert-title">AI Internship — IBM Watson NLP</div>
+          <div class="cert-date">Jul – Aug 2024 · Verified</div>
+        </div>
+
+        <div class="cert-card" style="border-color:rgba(200,64,26,0.25); background:linear-gradient(135deg,rgba(200,64,26,0.10),rgba(200,64,26,0.03))">
+          <div class="cert-issuer">Hugging Face · OpenAI</div>
+          <div class="cert-title">LLM & Transformer Architecture</div>
+          <div class="cert-date">Self-study · 2024</div>
+        </div>
+      </div>
+
+      <!-- Education -->
+      <div>
+        <div class="s-section-label">Education</div>
+        <div class="edu-item">
+          <div class="edu-degree">B.Tech CSE (AI & ML)</div>
+          <div class="edu-school">GB Pant Institute of Engg. & Tech.</div>
+          <div class="edu-meta">CGPA 7.0 · Expected 2026</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-degree">Class 12th — PCM</div>
+          <div class="edu-school">Don Bosco Sr. Sec. School</div>
+          <div class="edu-meta">93.4% · 2022</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-degree">Class 10th</div>
+          <div class="edu-school">Don Bosco Sr. Sec. School</div>
+          <div class="edu-meta">86% · 2020</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num">3</div>
+          <div class="stat-label">AI Projects</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">91%</div>
+          <div class="stat-label">Best Accuracy</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">40%</div>
+          <div class="stat-label">Latency Cut</div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div>
+        <div class="section-head">
+          <h2>Summary</h2>
+          <div class="line"></div>
+        </div>
+        <p class="summary-text">
+          Final-year B.Tech student specializing in Generative AI and Agentic AI workflows. Experienced in building production-grade RAG pipelines, multi-agent systems, and deploying context-aware LLM applications that bridge complex ML research with scalable software solutions.
+        </p>
+      </div>
+
+      <!-- Projects -->
+      <div>
+        <div class="section-head">
+          <h2>Key Projects</h2>
+          <div class="line"></div>
+          <div class="num">03</div>
+        </div>
+
+        <div class="project-card">
+          <div class="proj-head">
+            <div>
+              <div class="proj-title">Agentic PDF RAG Chatbot</div>
+              <div class="proj-tags">
+                <span class="proj-tag">LangChain</span>
+                <span class="proj-tag">FAISS</span>
+                <span class="proj-tag">LLaMA-3</span>
+                <span class="proj-tag">OpenAI API</span>
+              </div>
+            </div>
+            <div class="proj-stat">−40%<br>latency</div>
+          </div>
+          <ul class="proj-bullets">
+            <li>Multi-Step Reasoning agent with Tool Calling to analyze complex PDFs; 40% reduction in retrieval latency vs keyword search.</li>
+            <li>FAISS vector storage + LangChain conversational memory for coherent long-form interactions.</li>
+            <li>Few-shot & Chain-of-Thought prompting improved response relevance by 25%.</li>
+          </ul>
+        </div>
+
+        <div class="project-card" style="border-left-color: var(--gold);">
+          <div class="proj-head">
+            <div>
+              <div class="proj-title">NLP Fake News Detector</div>
+              <div class="proj-tags">
+                <span class="proj-tag">Hugging Face</span>
+                <span class="proj-tag">Scikit-Learn</span>
+                <span class="proj-tag">TF-IDF</span>
+              </div>
+            </div>
+            <div class="proj-stat" style="color:var(--gold); background:rgba(196,154,58,0.09)">91%<br>accuracy</div>
+          </div>
+          <ul class="proj-bullets">
+            <li>Classification system with 91% accuracy using Hugging Face Transformers and ensemble learning.</li>
+            <li>Deployed as a web app on Render with sub-200ms response time for real-time inference.</li>
+          </ul>
+        </div>
+
+        <div class="project-card" style="border-left-color: var(--accent);">
+          <div class="proj-head">
+            <div>
+              <div class="proj-title">Multi-Agent Research Pipeline</div>
+              <div class="proj-tags">
+                <span class="proj-tag">CrewAI</span>
+                <span class="proj-tag">LangGraph</span>
+                <span class="proj-tag">GPT-4o</span>
+              </div>
+            </div>
+            <div class="proj-stat">95%<br>accuracy</div>
+          </div>
+          <ul class="proj-bullets">
+            <li>Multi-agent system where specialized agents autonomously handle scraping, summarization, and fact-checking.</li>
+            <li>Automated feedback loops between agents ensuring 95% factual accuracy in generated reports.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div>
+        <div class="section-head">
+          <h2>Experience</h2>
+          <div class="line"></div>
+          <div class="num">02</div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-header">
+            <div class="exp-role">Artificial Intelligence Intern</div>
+            <div class="exp-date">Jul – Aug 2024</div>
+          </div>
+          <div class="exp-company">CSRBOX · Remote</div>
+          <ul class="exp-bullets">
+            <li>Engineered an AI chatbot using IBM Watson and NLP, automating 60% of repetitive customer queries.</li>
+            <li>Optimized model training scripts, achieving 15% improvement in intent classification accuracy.</li>
+          </ul>
+        </div>
+
+        <div class="exp-divider"></div>
+
+        <div class="exp-item">
+          <div class="exp-header">
+            <div class="exp-role">Summer School Participant</div>
+            <div class="exp-date">Jun – Jul 2024</div>
+          </div>
+          <div class="exp-company">IIT Madras · Remote</div>
+          <ul class="exp-bullets">
+            <li>Deep Learning architectures with PyTorch; built a survival prediction engine with 88% precision.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER STRIP -->
+  <div class="resume-footer">
+    <div class="footer-text">ANKIT DASUNI · AI / ML ENGINEER · 2026</div>
+    <div class="footer-dot"></div>
+    <div class="footer-text">115ANKITDASUNI@GMAIL.COM</div>
+    <div class="footer-dot"></div>
+    <div class="footer-text">GITHUB.COM/ANKITDASUNI</div>
+  </div>
+
+</div><!-- /resume -->
+
+<script>
+  async function downloadPDF() {
+    const btn = document.querySelector('.btn-dl');
+    btn.textContent = 'Generating…';
+    btn.disabled = true;
+
+    const { jsPDF } = window.jspdf;
+    const resume = document.getElementById('resume');
+
+    try {
+      const canvas = await html2canvas(resume, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#f5f0e8',
+        logging: false,
+        width: 794,
+        windowWidth: 794
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pdfW = pdf.internal.pageSize.getWidth();
+      const pdfH = (canvas.height * pdfW) / canvas.width;
+
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH);
+      pdf.save('Ankit_Dasuni_Resume.pdf');
+    } catch(e) {
+      alert('PDF generation failed: ' + e.message);
+    }
+
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF`;
+    btn.disabled = false;
+  }
+</script>
+</body>
+</html>
